@@ -25,7 +25,7 @@ function getUserMenus($mysqli, $id_user, $id_menu) {
         die("Error en la consulta: " . mysqli_error($mysqli));
     }
     if($id_menu != 0){
-        $menus = '<li class="nav-item"><a class="nav-link " href="../../app">Inicio</a></li>';
+        $menus = '<li class="nav-item"><a class="nav-link " href="?m=0">Inicio</a></li>';
     } else {
         $menus = '';
     }
@@ -37,4 +37,26 @@ function getUserMenus($mysqli, $id_user, $id_menu) {
     }
     return $menus; // Devuelve texto con los menus en formato HTML
 }
+
+
+function getDesMenu($mysqli, $id_menu) {
+
+    // Sanitizar parámetro por seguridad
+    $id_menu= intval($id_menu);
+
+    $sql_dm = "SELECT id_areamenu, description FROM pb_areamenu where id_areamenu = $id_menu";
+
+    $result_dm = mysqli_query($mysqli, $sql_dm);
+    $val_dm = $result_dm->num_rows;
+
+    // Si ocurre error en la consulta
+    if (!$result_dm or $val_dm == 0 or $val_dm > 1) {
+        die("Error al obtener el menu: " . mysqli_error($mysqli));
+    }else{
+        $row_dm = mysqli_fetch_assoc($result_dm);
+        $des_menu = $row_dm['description'];
+    }
+    return $des_menu; // Devuelve texto con los menus en formato HTML
+}
+
 ?>

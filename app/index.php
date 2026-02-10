@@ -15,13 +15,27 @@ if (!isset($_SESSION['iduser'])) {
     exit();
 }
 
+require_once 'Permissions/menus.php';
+
+$id_menu = 0;
+$des_menu = "Inicio";
+
+if(isset($_GET['m']) && !empty($_GET['m'])){
+   
+   $id_menu = intval($_GET['m']);
+   $des_menu = getDesMenu($mysqli, $id_menu);
+   // Recuperar nombre del menú desde la base de datos
+  }
+
+
+
 ?>
 <!doctype html>
 <html lang="es" dir="ltr">
   <head>
     <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-      <title>Inicio | PowerBridge</title>
+      <title>PowerBridge | <?php echo $des_menu; ?></title>
       <!-- Favicon -->
       <link rel="shortcut icon" href="../assets/images/favicon.ico" />
       <!-- Library / Plugin Css Build -->
@@ -36,6 +50,7 @@ if (!isset($_SESSION['iduser'])) {
       <link rel="stylesheet" href="../assets/css/customizer.min.css" />
       <!-- RTL Css -->
       <link rel="stylesheet" href="../assets/css/rtl.min.css"/>
+      <link rel="stylesheet" href="../assets/css/main.css"/>
   </head>
   <body class="boxed-fancy">
     <div class="boxed-inner">
@@ -83,8 +98,8 @@ if (!isset($_SESSION['iduser'])) {
                </div>
                <ul class="navbar-nav">
                   <?php 
-                  require_once 'Permissions/menus.php';
-                  $menus = getUserMenus($mysqli, $id_user, 0);
+                  
+                  $menus = getUserMenus($mysqli, $id_user, $id_menu);
                   if (empty($menus)) {
                      error_log('No menus returned for user ' . $id_user.' '.$usrname.' '.$surname);
                  }
@@ -166,7 +181,7 @@ if (!isset($_SESSION['iduser'])) {
                         </div>
                         <div class="progress-detail">
                            <p  class="mb-2">Modúlo</p>
-                           <h4 class="counter">Inicio</h4>
+                           <h4 class="counter"><?php echo $des_menu; ?></h4>
                         </div>
                      </div>
                   </div>
@@ -181,7 +196,7 @@ if (!isset($_SESSION['iduser'])) {
                         </div>
                         <div class="progress-detail">
                            <p  class="mb-2">Versión</p>
-                           <h4 class="counter">0.2</h4>
+                           <h4 class="counter">0.3</h4>
                         </div>
                      </div>
                   </div>
@@ -209,41 +224,26 @@ if (!isset($_SESSION['iduser'])) {
                   </div>
                </div>
                <div class="card-body">
-                  <div class=" d-flex profile-media align-items-top mb-2">
+               <?php require_once 'Permissions/operations.php'; 
+                  $options = getUserOperations($mysqli, $id_user, $id_menu);
+                  if (empty($options)) {
+                     error_log('No options returned for user ' . $id_user.' '.$username.' '.$surname);
+                 }
+                 echo $options;
+
+                 if($id_menu == 0){
+                     echo '<div class=" d-flex profile-media align-items-top mb-2">
                      <div class="profile-dots-pills border-primary mt-1"></div>
                      <div class="ms-4">
-                        <a href="#"><h6 class=" mb-1">Administrar Perfil</h6></a>
-                        <span class="mb-0" style="font-size: x-small;">En construcción </span>
+                        <a><p class=" mb-1">Seleccione una opción del menú para listar las actividades</p></a>
                      </div>
-                  </div>
-                  <!--div class=" d-flex profile-media align-items-top mb-2">
-                     <div class="profile-dots-pills border-primary mt-1"></div>
-                     <div class="ms-4">
-                        <a href=""><h6 class=" mb-1">Opción 2</h6></a>
-                        <span class="mb-0" style="font-size: x-small;">Descripción</span>
-                     </div>
-                  </!--div>
-                  <div class=" d-flex profile-media align-items-top mb-2">
-                     <div class="profile-dots-pills border-primary mt-1"></div>
-                     <div class="ms-4">
-                        <a href=""><h6 class=" mb-1">Opción 3</h6></a>
-                        <span class="mb-0" style="font-size: x-small;">Descripción</span>
-                     </div>
-                  </div>
-                  <div class=" d-flex profile-media align-items-top mb-2">
-                     <div class="profile-dots-pills border-primary mt-1"></div>
-                     <div class="ms-4">
-                        <a href=""><h6 class=" mb-1">Opción 4</h6></a>
-                        <span class="mb-0" style="font-size: x-small;">Descripción</span>
-                     </div>
-                  </div>
-                  <div-- class=" d-flex profile-media align-items-top mb-2">
-                     <div class="profile-dots-pills border-primary mt-1"></div>
-                     <div class="ms-4">
-                        <a href=""><h6 class=" mb-1">Opción 5</h6></a>
-                        <span class="mb-0" style="font-size: x-small;">Descripción</span>
-                     </div>
-                  </div-->
+                  </div>';
+                     
+
+                 }
+
+                  ?>
+
                </div>
             </div>
          </div>
@@ -251,8 +251,8 @@ if (!isset($_SESSION['iduser'])) {
    </div>
    <div class="col-md-12 col-lg-10">
       <div class="row">
-         <div class="col-md-12">
-            <iframe src="" frameborder="0"></iframe>
+      <div class="iframe-container">
+         <iframe name="frame-cont"  frameborder="0"></iframe>
          </div>
       </div>
    </div> 

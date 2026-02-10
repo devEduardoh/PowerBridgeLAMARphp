@@ -1,15 +1,16 @@
 <?php
-/*
-$ServerName = "10.0.1.6"; // 10.0.1.6
-$Username = "app_upo"; // 
-$Password = "APPC0retUP0&2025*";
-$NameBD = "upo";
-*/
 
+$ServerName = "10.0.1.6"; // 10.0.1.6
+$Username = "app_lamar"; // 
+$Password = "APPC0retL4m4r&2025*";
+$NameBD = "lamar";
+
+/*
 $ServerName = "127.0.0.1"; // 10.0.1.6
 $Username = "root"; // 
 $Password = "";
 $NameBD = "upo";
+*/
 
 $mysqli=new mysqli($ServerName, $Username, $Password, $NameBD); 
 $mysqli->set_charset("utf8");

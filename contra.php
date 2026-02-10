@@ -1,1 +1,0 @@
-<?php echo password_hash("Gatitos Bonitos", PASSWORD_DEFAULT); ?>
