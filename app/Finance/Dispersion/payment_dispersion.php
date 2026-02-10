@@ -193,9 +193,16 @@ if (!isset($_SESSION['iduser'])) {
                                         echo '<input type="hidden" name="datos" value="' . htmlspecialchars(json_encode($datos)) . '">';
                                         
                                         echo '<div class="d-flex justify-content-end mt-3">';
-                                        echo '<button type="submit" class="btn btn-success">';
+                                        echo '<button type="submit" class="btn btn-success" id="btnEnviar">';
                                         echo '<i class="ti ti-send me-1"></i>Enviar registros';
                                         echo '</button>';
+                                        echo '</div>';
+                                        
+                                        // Alert de procesamiento (oculto inicialmente)
+                                        echo '<div id="alertProcessing" style="display: none; margin-top: 20px;">';
+                                        echo '<div class="alert alert-info alert-dismissible fade show" role="alert">';
+                                        echo ' Por favor espera, se está procesando el archivo...';
+                                        echo '</div>';
                                         echo '</div>';
                                         
                                         echo '</form>';
@@ -246,5 +253,21 @@ if (!isset($_SESSION['iduser'])) {
     <script src="../../../assets/js/hope-ui.js" defer></script>
     <!-- Custom Script -->
     <script src="../../../assets/js/form_syncprospect.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const btnEnviar = document.getElementById('btnEnviar');
+            const alertProcessing = document.getElementById('alertProcessing');
+
+            if (btnEnviar) {
+                const form = btnEnviar.closest('form');
+                
+                form.addEventListener('submit', function (e) {
+                    btnEnviar.disabled = true;
+                    alertProcessing.style.display = 'block';
+                });
+            }
+        });
+    </script>
   </body>
 </html>
