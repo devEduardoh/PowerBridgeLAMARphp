@@ -36,6 +36,7 @@ if (!isset($_SESSION['iduser'])) {
       <link rel="stylesheet" href="../../../assets/css/customizer.min.css" />
       <!-- RTL Css -->
       <link rel="stylesheet" href="../../../assets/css/rtl.min.css"/>
+      <link rel="stylesheet" href="../../../assets/css/main.css"/>
   </head>
   <body>
     <div >
@@ -112,7 +113,7 @@ if (!isset($_SESSION['iduser'])) {
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
                                     <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
                                     </svg>
-                                    Archivo procesado correctamente</div>';
+                                    Archivo cargado correctamente</div>';
                                     echo '<div class="alert alert-info">';
                                     echo '<strong>Información del archivo:</strong><br>';
                                     echo 'Total de líneas: ' . $totalLineas . '<br>';
@@ -158,7 +159,7 @@ if (!isset($_SESSION['iduser'])) {
                                     // Mostrar los datos en una tabla
                                     if (!empty($datos)) {
                                         echo '<h5 class="mt-4">Datos Extraídos (' . count($datos) . ' registros)</h5>';
-                                        echo '<div class="table-responsive">';
+                                        echo '<div class="table-scroll-container">';
                                         echo '<table class="table table-striped">';
                                         echo '<thead>';
                                         echo '<tr>';
@@ -201,7 +202,7 @@ if (!isset($_SESSION['iduser'])) {
                                         // Alert de procesamiento (oculto inicialmente)
                                         echo '<div id="alertProcessing" style="display: none; margin-top: 20px;">';
                                         echo '<div class="alert alert-info alert-dismissible fade show" role="alert">';
-                                        echo ' Por favor espera, se está procesando el archivo...';
+                                        echo ' Por favor espera, se está validando el archivo...';
                                         echo '</div>';
                                         echo '</div>';
                                         

@@ -15,3 +15,13 @@
   overflow: hidden; /* Evita el scroll interno */
 }
 
+.table-scroll-container {
+  max-height: 500px;
+  overflow-y: auto;
+  border: 1px solid #dee2e6;
+  border-radius: 0.25rem;
+}
+
+.table-scroll-container table {
+  margin-bottom: 0;
+}

@@ -59,6 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['datos'])) {
       <link rel="stylesheet" href="../../../assets/css/customizer.min.css" />
       <!-- RTL Css -->
       <link rel="stylesheet" href="../../../assets/css/rtl.min.css"/>
+      <link rel="stylesheet" href="../../../assets/css/main.css"/>
   </head>
   <body>
     <div >
@@ -75,10 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['datos'])) {
 <div class="row">
    <div class="col-md-12 col-lg-12">
    <!-- Contenido del Frame -->
-   
-    <div class="row justify-content-center">
-        <div>
-        
+       
             <!-- Card principal -->
             <div class="card shadow-sm mb-4">
                 <div class="card-header">
@@ -99,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['datos'])) {
                             if($result_getvalidate['status_result'] > 0) {
                         ?>
 
-                            <div class="table-responsive">
+                            <div class="table-scroll-container">
                             <table class="table table-striped">
                             <thead>
                                 <tr>
@@ -126,7 +124,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['datos'])) {
                                         <td colspan="2">
                                             <form action="payment_dispersionPwC.php" method="post">
                                                 <input type="hidden" name="idlote" value="<?php echo $idloteValida; ?>">
-                                                <button type="submit" class="btn btn-primary">Procesar lote en PwC</button>
+                                                <input type="hidden" name="lineas" value="<?php echo $record_count; ?>">
+                                                <button type="submit" class="btn btn-primary" id="btnEnviar">Procesar lote en PwC</button>
                                             </form>
                                         </td>
                                         <td colspan="6" style="font-size: small; color: red;">
@@ -142,6 +141,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['datos'])) {
                                 </tfoot>
                             </table>
                             </div>
+                                        <div id="alertProcessing" style="display: none; margin-top: 20px;">
+                                        <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                         Por favor espera, se está procesando el archivo...
+                                        </div>
+                                        </div>
                             <?php
 
                             }else{
@@ -216,5 +220,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['datos'])) {
     <script src="../../../assets/js/hope-ui.js" defer></script>
     <!-- Custom Script -->
     <script src="../../../assets/js/form_syncprospect.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const btnEnviar = document.getElementById('btnEnviar');
+            const alertProcessing = document.getElementById('alertProcessing');
+
+            if (btnEnviar) {
+                const form = btnEnviar.closest('form');
+                
+                form.addEventListener('submit', function (e) {
+                    btnEnviar.disabled = true;
+                    alertProcessing.style.display = 'block';
+                });
+            }
+        });
+    </script>
   </body>
 </html>
