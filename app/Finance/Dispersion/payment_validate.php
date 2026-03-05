@@ -97,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['datos'])) {
                             if($result_getvalidate['status_result'] > 0) {
                         ?>
 
-                            <div class="table-scroll-container">
+                            <div class="table-scroll-container table-responsive">
                             <table class="table table-striped">
                             <thead>
                                 <tr>

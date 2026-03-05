@@ -18,7 +18,7 @@ $sql = "SELECT IdProcesa
         , Amount
         , FORMAT(CAST(FechaPago AS DATETIME) + CAST(Hora AS DATETIME), 'dd/MM/yyyy HH:mm') AS FechaPago
         , StatusLinea
-        , ValidaRegistro
+        , CONCAT(ValidaRegistro, ' Recibo No. ',ReceiptNumber) ValidaRegistro
         , DetalleError
         from NG_ProcesaDisp
         LEFT OUTER JOIN CODE_ACASESSION CA ON AcademicSession = CA.CODE_VALUE_KEY

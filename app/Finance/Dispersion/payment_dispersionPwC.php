@@ -83,8 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idlote'])) {
 
                 <div class="card-body">
                     <?php  
-                    if($lineas == $result_PrDis['contadores']['cont_ngPrDisOk'] and $lineas == $result_PrDis['contadores']['cont_updlog']
-                        and ($result_PrDis['contadores']['cont_ngPrDisErr'] + $result_PrDis['contadores']['cont_errUpdlog']) == 0){
+                    
                             
                             $idloteProcesa = $result_PrDis['lote_procesa'];
 
@@ -93,8 +92,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idlote'])) {
                             if($result_getProcesa['status_result'] > 0) {
                         ?>
 
-                            <div class="table-scroll-container">
-                            <table class="table table-striped">
+                            <div class="table-scroll-container table-responsive">
+                            <table class="table table-striped" id="procesa-table">
                             <thead>
                                 <tr>
                                     <th>Lote</th>
@@ -120,6 +119,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idlote'])) {
                                         <td colspan="2">
                                                 <a href="payment_dispersion.php" class="btn btn-primary">Regresar</a>
                                         </td>
+                                        <td colspan="2">
+                                                <button class="btn btn-primary" onclick="copiarTabla()">Copiar Resultado </button>
+                                        </td>
                                         <td colspan="6" style="font-size: small; color: red;">
                                             <?php 
                                             if($result_getProcesa['ERR_NGPROCESA'] > 0) {
@@ -144,7 +146,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idlote'])) {
                                             <strong>Hubo un error al recuperar los registros del lote'.$idloteProcesa.'</strong>
                                         </div>';
                             }
-                        }else{
+                            if($lineas != $result_PrDis['contadores']['cont_ngPrDisOk'] OR $lineas != $result_PrDis['contadores']['cont_updlog']
+                            OR ($result_PrDis['contadores']['cont_ngPrDisErr'] + $result_PrDis['contadores']['cont_errUpdlog']) > 0){
                     
                     ?>
 
@@ -156,10 +159,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idlote'])) {
             </div>
             <div class="alert alert-warning  mt-3" role="alert">
                         Lote: <?php echo $result_PrDis['lote_procesa']; ?> <br>
-                        Registros con error en validación: <?php echo $result_PrDis['contadores']['cont_ngPrDisErr']; ?> <br>
+                        Registros con error en dispersión: <?php echo $result_PrDis['contadores']['cont_ngPrDisErr']; ?> <br>
                         Registros con error en log: <?php echo $result_PrDis['contadores']['cont_errUpdlog']; ?> <br>   
-                        Registros validados PwC: <?php echo $result_PrDis['contadores']['cont_ngPrDisOk']; ?> <br>   
-                        Registros Insertados en Log: <?php echo $result_PrDis['contadores']['cont_updlog']; ?> <br>
+                        Registros procesados PwC: <?php echo $result_PrDis['contadores']['cont_ngPrDisOk']; ?> <br>   
+                        Registros Actualizados en Log: <?php echo $result_PrDis['contadores']['cont_updlog']; ?> <br>
             </div>
             <div class="alert alert-secondary" role="alert">
                         Detalle de errores en validación PwC: <br>
@@ -207,5 +210,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idlote'])) {
     <script src="../../../assets/js/hope-ui.js" defer></script>
     <!-- Custom Script -->
     <script src="../../../assets/js/form_syncprospect.js"></script>
+    <script>
+        // Copia la tabla de usuarios al portapapeles para compartir accesos rapidamente.
+        function copiarTabla() {
+            let tabla = document.getElementById("procesa-table");
+            let rango = document.createRange();
+            rango.selectNode(tabla);
+            window.getSelection().removeAllRanges();
+            window.getSelection().addRange(rango);
+            window.alert("Contenido copiado, pegue en una hoja de excel");
+            document.execCommand("copy");
+            window.getSelection().removeAllRanges();
+        }
+    </script>
+
   </body>
 </html>

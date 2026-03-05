@@ -21,6 +21,7 @@ $serverName = "tcp:192.168.1.12,1433";
             "LoginTimeout" => 300, "ConnectRetryCount" => 5, "MultipleActiveResultSets" => 1);
         
 
+            sqlsrv_configure("WarningsReturnAsErrors", 0);
 $conn = sqlsrv_connect($serverName, $connectionOptions);
 
 if($conn == false){

@@ -159,7 +159,7 @@ if (!isset($_SESSION['iduser'])) {
                                     // Mostrar los datos en una tabla
                                     if (!empty($datos)) {
                                         echo '<h5 class="mt-4">Datos Extraídos (' . count($datos) . ' registros)</h5>';
-                                        echo '<div class="table-scroll-container">';
+                                        echo '<div class="table-scroll-container table-responsive">';
                                         echo '<table class="table table-striped">';
                                         echo '<thead>';
                                         echo '<tr>';
