@@ -108,25 +108,28 @@ if (!isset($_SESSION['iduser'])) {
                                     echo '<div class="alert alert-danger">Error al leer el archivo.</div>';
                                 } else {
                                     $totalLineas = count($lineas);
+                                    $lineas_descartadas = 0;
                                     
                                     echo '<div class="alert alert-success"> 
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
                                     <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
                                     </svg>
-                                    Archivo cargado correctamente</div>';
-                                    echo '<div class="alert alert-info">';
-                                    echo '<strong>Información del archivo:</strong><br>';
-                                    echo 'Total de líneas: ' . $totalLineas . '<br>';
-                                    echo 'Registros procesados: ' . ($totalLineas - 2) . '<br>';
-                                    echo 'Primera línea (descartada): ' . htmlspecialchars(substr($lineas[0], 0, 50)) . '...<br>';
-                                    echo 'Última línea (descartada): ' . htmlspecialchars(substr($lineas[$totalLineas - 1], 0, 50)) . '...';
-                                    echo '</div>';
+                                    Archivo cargado correctamente <br>
+                                    Total de líneas: ' . $totalLineas . '
+                                    </div>';
                                     
                                     // Procesar las líneas (desde la línea 2 hasta la penúltima)
                                     $datos = [];
                                     
-                                    for ($i = 1; $i < $totalLineas - 1; $i++) {
+                                    
+                                    for ($i = 0; $i < $totalLineas; $i++) {
                                         $linea = $lineas[$i];
+                                        
+                                        // Solo procesar líneas que empiezan con 2 (descartar las que empiezan con 0 o 4)
+                                        if (substr($linea, 0, 1) !== '2') {
+                                            $lineas_descartadas ++;
+                                            continue;
+                                        }
                                         
                                         // Buscar la posición donde empieza "000101" (inicio de columna 2)
                                         $pos_col2 = strpos($linea, '000101');
@@ -158,7 +161,12 @@ if (!isset($_SESSION['iduser'])) {
                                     
                                     // Mostrar los datos en una tabla
                                     if (!empty($datos)) {
-                                        echo '<h5 class="mt-4">Datos Extraídos (' . count($datos) . ' registros)</h5>';
+                                        echo '<div class="alert alert-warning">';
+                                        echo '<strong>Información del archivo:</strong><br>';
+                                        echo 'Datos Extraídos (' . count($datos) . ' registros) <br>';
+                                        echo 'Líneas descartadas: ' . $lineas_descartadas. '<br>';
+                                        echo '</div>';
+
                                         echo '<div class="table-scroll-container table-responsive">';
                                         echo '<table class="table table-striped">';
                                         echo '<thead>';

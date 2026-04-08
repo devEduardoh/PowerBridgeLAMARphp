@@ -15,7 +15,7 @@ if (!isset($_SESSION['iduser'])) {
 }
 
 require_once '../../../logic/conn_ms.php';
-require_once '../../../logic/conn_ss.php';
+require_once '../../../logic/conn_dis.php';
 
 $error_post = '';
 
