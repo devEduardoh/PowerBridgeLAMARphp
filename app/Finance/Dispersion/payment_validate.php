@@ -19,17 +19,19 @@ require_once '../../../logic/conn_dis.php';
 
 $error_post = '';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['datos'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['datos']) && isset($_POST['file'])) {
         
     // Decodificar el JSON recibido
     $datos = json_decode($_POST['datos'], true);
+    
+    $name_file = $_POST['file'];
 
     if ($datos !== null && is_array($datos)) {
 
         $record_count = count($datos);
         
         require_once 'process/ngvalidate.php';
-        $result_validate = execute_NGValida($datos, $id_user, $conn, $mysqli);
+        $result_validate = execute_NGValida($datos, $id_user, $name_file ,$conn, $mysqli);
 
     }else{
         $error_post = 'NO SE ENVIARON DATOS O EL FORMATO ES INCORRECTO';
@@ -121,14 +123,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['datos'])) {
                             </tbody>                            
                                 <tfoot>
                                     <tr>
-                                        <td colspan="2">
-                                            <form action="payment_dispersionPwC.php" method="post">
-                                                <input type="hidden" name="idlote" value="<?php echo $idloteValida; ?>">
-                                                <input type="hidden" name="lineas" value="<?php echo $record_count; ?>">
-                                                <button type="submit" class="btn btn-primary" id="btnEnviar">Procesar lote en PwC</button>
-                                            </form>
-                                        </td>
-                                        <td colspan="6" style="font-size: small; color: red;">
+                                        <td colspan="8" style="font-size: small; color: red;">
                                             <?php 
                                             if($result_getvalidate['ERR_NGVALIDA'] > 0) {
                                                 echo "<strong>Existen errores en los registros validados en PwC. Por favor revisar detalle en columna 'Detalle validación'
@@ -141,11 +136,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['datos'])) {
                                 </tfoot>
                             </table>
                             </div>
-                                        <div id="alertProcessing" style="display: none; margin-top: 20px;">
+
+                            <div class="row mt-3">
+                                <div class="col-md-12 col-lg-3">
+                                <form action="payment_dispersionPwC.php" method="post">
+                                                <input type="hidden" name="idlote" value="<?php echo $idloteValida; ?>">
+                                                <input type="hidden" name="lineas" value="<?php echo $record_count; ?>">
+                                                <button type="submit" class="btn btn-primary" id="btnEnviar">Procesar lote en PwC</button>
+                                            </form>
+                                </div>
+                                <div class="col-md-12 col-lg-9">
+                                        <div id="alertProcessing" style="display: none;">
                                         <div class="alert alert-info alert-dismissible fade show" role="alert">
                                          Por favor espera, se está procesando el archivo...
                                         </div>
                                         </div>
+                                </div>
+                            </div>
+                                        
+                                        
                             <?php
 
                             }else{

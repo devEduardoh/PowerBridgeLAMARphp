@@ -60,9 +60,23 @@ if (!isset($_SESSION['iduser'])) {
             <!-- Card principal -->
             <div class="card shadow-sm mb-4">
                 <div class="card-header">
-                    <h4 class="card-title">
-                        Dispersión de Cobranza PowerCampus
-                    </h4>
+                    <div class="row">
+                        <div class="col-lg-8 col-md-6 col-sm-12">
+                             <h4 class="card-title">
+                                Dispersión de Cobranza PowerCampus
+                            </h4>
+                        </div>
+                        <div class="col-lg-4 col-md-6 col-sm-12">   
+                                <div class="d-flex justify-content-end">
+                                    <a href="bita_dispersion.php" class="btn btn-outline-info"> Bitácora de archivos procesados &emsp;
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-calendar3" viewBox="0 0 24 16">
+                                    <path d="M14 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2M1 3.857C1 3.384 1.448 3 2 3h12c.552 0 1 .384 1 .857v10.286c0 .473-.448.857-1 .857H2c-.552 0-1-.384-1-.857z"/>
+                                    <path d="M6.5 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2"/>
+                                    </svg>
+                                    </a>
+                                </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="card-body">
@@ -78,7 +92,7 @@ if (!isset($_SESSION['iduser'])) {
                     </div>
 
                     <div class="d-flex justify-content-end">
-                        <button type="submit" name="procesar" class="btn btn-primary">
+                        <button type="submit" name="procesar" class="btn btn-primary btn-sm">
                             <i class="ti ti-play me-1"></i>Cargar Archivo de Pagos
                         </button>
                     </div>
@@ -100,6 +114,10 @@ if (!isset($_SESSION['iduser'])) {
                             // Validar que se subió correctamente
                             if ($archivo['error'] === UPLOAD_ERR_OK) {
                                 $rutaArchivo = $archivo['tmp_name'];
+
+
+                            // Obtener el nombre del archivo
+                            $name_file = htmlspecialchars($_FILES['archivo']['name']);
                                 
                                 // Leer el archivo línea por línea
                                 $lineas = file($rutaArchivo, FILE_IGNORE_NEW_LINES);
@@ -163,8 +181,9 @@ if (!isset($_SESSION['iduser'])) {
                                     if (!empty($datos)) {
                                         echo '<div class="alert alert-warning">';
                                         echo '<strong>Información del archivo:</strong><br>';
+                                        echo 'Nombre del archivo: '.$name_file.'<br>';
                                         echo 'Datos Extraídos (' . count($datos) . ' registros) <br>';
-                                        echo 'Líneas descartadas: ' . $lineas_descartadas. '<br>';
+                                        echo 'Líneas descartadas (Encabezados de archivo y sumarios/pie de archivo): ' . $lineas_descartadas. '<br>';
                                         echo '</div>';
 
                                         echo '<div class="table-scroll-container table-responsive">';
@@ -200,6 +219,7 @@ if (!isset($_SESSION['iduser'])) {
                                         echo '<form method="POST" action="payment_validate.php">';
                                         // Convertir los datos a JSON para enviarlos
                                         echo '<input type="hidden" name="datos" value="' . htmlspecialchars(json_encode($datos)) . '">';
+                                        echo '<input type="hidden" name="file" value="' . $name_file . '">';
                                         
                                         echo '<div class="d-flex justify-content-end mt-3">';
                                         echo '<button type="submit" class="btn btn-success" id="btnEnviar">';

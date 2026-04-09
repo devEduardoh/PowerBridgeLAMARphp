@@ -15,21 +15,13 @@ if (!isset($_SESSION['iduser'])) {
 }
 
 require_once '../../../logic/conn_ms.php';
-require_once '../../../logic/conn_dis.php';
+require_once '../../../logic/conn_ss.php';
 
 $error_post = '';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idlote'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idProcesa'])) {
         
-        $id_lote_valida = $_POST['idlote'];
-        $lineas = $_POST['lineas'];
-        require_once 'process/ngprocesadisp.php';
-        $result_PrDis = execute_NGDispersion($id_lote_valida, $id_user, $conn, $mysqli, $lineas);
-
-    }else{
-        $error_post = 'NO SE ENVIARON DATOS';
-        exit();
-    }
+    $id_Procesa = $_POST['idProcesa'];
 
 ?>
 <!doctype html>
@@ -77,18 +69,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idlote'])) {
             <div class="card shadow-sm mb-4">
                 <div class="card-header">
                     <h4 class="card-title">
-                        Resultado dispersión de Cobranza en PowerCampus
+                        Detalle dispersión de Cobranza en PowerCampus ID: <?php echo $id_Procesa; ?> <em>NGProcesaDisp</em>
                     </h4>
                 </div>
 
                 <div class="card-body">
                     <?php  
-                    
-                            
-                            $idloteProcesa = $result_PrDis['lote_procesa'];
-
                             require_once 'process/getprocesadisp.php';
-                            $result_getProcesa = getProcesa( $idloteProcesa, $conn);
+                            $result_getProcesa = getProcesa( $id_Procesa, $conn);
                             if($result_getProcesa['status_result'] > 0) {
                         ?>
 
@@ -114,25 +102,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idlote'])) {
                             <tbody>
                                 <?php echo $result_getProcesa['rows']; ?>
                             </tbody>                            
-                                <tfoot>
-                                    <tr>
-                                        <td colspan="7" style="font-size: small; color: red;">
-                                            <?php 
-                                            if($result_getProcesa['ERR_NGPROCESA'] > 0) {
-                                                echo "<strong>Hay registros que NO fueron procesados por PwC. Por favor revisar detalle en columna 'Detalle Procesa/Dispersión'
-                                                <br>Se deben de validar y ajustar dichos registros para poder procesarlos.</strong>";
-                                            }
-                                            ?>
-                                        </td>
-                                        <td colspan="6"></td>
-                                    </tr>
-                                </tfoot>
                             </table>
                             </div>
-                                <div class="row mt-4">
-                                    <div class="col-md-4 col-lg-6"><button class="btn btn-primary" onclick="copiarTabla()">Copiar Resultado </button></div>
-                                    <div class="col-md-4 col-lg-6"><a href="payment_dispersion.php" class="btn btn-info">Regresar</a></div>
-                                </div>
                             <?php
 
                             }else{
@@ -141,38 +112,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idlote'])) {
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
                                         <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
                                         </svg>
-                                            <strong>Hubo un error al recuperar los registros del lote'.$idloteProcesa.'</strong>
+                                            <strong>Hubo un error al recuperar los registros del ID'.$id_Procesa.'</strong>
                                         </div>';
-                            }
-                            if($lineas != $result_PrDis['contadores']['cont_ngPrDisOk'] OR $lineas != $result_PrDis['contadores']['cont_updlog']
-                            OR ($result_PrDis['contadores']['cont_ngPrDisErr'] + $result_PrDis['contadores']['cont_errUpdlog']) > 0){
-                    
-                    ?>
-
-            <div class="alert alert-warning  mt-3" role="alert">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-exclamation-triangle-fill" viewBox="0 0 16 16">
-                <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5m.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
-                </svg>
-                    <strong>El lote se proceso con errores</strong>
-            </div>
-            <div class="alert alert-warning  mt-3" role="alert">
-                        Lote: <?php echo $result_PrDis['lote_procesa']; ?> <br>
-                        Registros con error en dispersión: <?php echo $result_PrDis['contadores']['cont_ngPrDisErr']; ?> <br>
-                        Registros con error en log: <?php echo $result_PrDis['contadores']['cont_errUpdlog']; ?> <br>   
-                        Registros procesados PwC: <?php echo $result_PrDis['contadores']['cont_ngPrDisOk']; ?> <br>   
-                        Registros Actualizados en Log: <?php echo $result_PrDis['contadores']['cont_updlog']; ?> <br>
-            </div>
-            <div class="alert alert-secondary" role="alert">
-                        Detalle de errores en validación PwC: <br>
-                        <p style="font-size: small;"><em><?php echo $result_PrDis['contadores']['detalle_err_ngPrDisp']; ?></em></p>
-                        <pre style="white-space: pre-wrap;"></pre>
-                        Detalle de errores insercción en Log: <br>
-                        <p style="font-size: small;"><em><?php echo $result_PrDis['contadores']['detalle_err_Updlog']; ?></em></p>
-            </div>
-                       <?php 
-                    }
-                       
-                       ?> 
+                            } ?>
+                            
+                            <div class="row mt-4">
+                                <div class="col-md-4 col-lg-6"><button class="btn btn-primary" onclick="copiarTabla()">Copiar Resultado </button></div>
+                                <div class="col-md-4 col-lg-6"><a href="bita_dispersion.php" class="btn btn-info">Regresar</a></div>
+                            </div>
                 </div>
             </div>
 
@@ -224,3 +171,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['idlote'])) {
 
   </body>
 </html>
+<?php 
+    }else{
+        $error_post = 'NO SE ENVIARON DATOS';
+        exit();
+    }
+
+?>

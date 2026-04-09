@@ -1,6 +1,6 @@
 <?php
 
-function execute_NGValida($datos, $id_user, $conn, $mysqli) {
+function execute_NGValida($datos, $id_user, $name_file ,$conn, $mysqli) {
 
     $contadores = [
         'cont_ngvalok' => 0,
@@ -75,7 +75,8 @@ if(intval($lote_valida) != 0){
     // Inicia inserccíón en log
             
                 $sql_inlog ="INSERT INTO pb_logdispersion
-                            (   idValida,
+                            (   archivo,
+                                idValida,
                                 numLinea,
                                 col1,
                                 col2,
@@ -85,7 +86,8 @@ if(intval($lote_valida) != 0){
                                 userValida,
                                 dateValida)
                                 VALUES
-                                ($lote_valida,
+                                ('$name_file',
+                                $lote_valida,
                                  $numLinea,
                                 '$col1',
                                 '$col2',
