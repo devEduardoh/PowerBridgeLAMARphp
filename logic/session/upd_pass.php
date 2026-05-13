@@ -4,7 +4,7 @@ if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
 } else {
   $ip = $_SERVER['REMOTE_ADDR'];
 }
-if($ip == '::1' OR $ip == '200.52.75.186' OR $ip == '10.0.1.21' OR $ip == '10.0.1.6' OR $ip == '127.0.0.1' or $ip == '187.188.103.121')
+if($ip == '::1' OR $ip == '200.52.75.186' OR $ip == '10.0.1.21' OR $ip == '10.0.1.6' OR $ip == '127.0.0.1' or $ip == '187.188.103.121' or $ip == '192.168.1.13')
 {
 require_once '../conn_ms.php';
 $error = 0;
